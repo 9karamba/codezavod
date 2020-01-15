@@ -15,6 +15,11 @@ class CreateVotesTable extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('question');
+            $table->json('answer_options');
+            $table->boolean('active')->default(false);
+            $table->bigInteger('type_vote_id')->unsigned()->index();
+            $table->foreign('type_vote_id')->references('id')->on('type_vote');
             $table->timestamps();
         });
     }
