@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'VoteController@active');
 
 Auth::routes(['register' => false]);
 
