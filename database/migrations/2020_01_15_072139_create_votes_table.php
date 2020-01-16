@@ -17,6 +17,7 @@ class CreateVotesTable extends Migration
             $table->bigIncrements('id');
             $table->string('question');
             $table->json('answer_options');
+            $table->integer('all_voters')->default(0);
             $table->boolean('active')->default(false);
             $table->bigInteger('type_vote_id')->unsigned()->index();
             $table->foreign('type_vote_id')->references('id')->on('type_vote');

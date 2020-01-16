@@ -13,6 +13,10 @@
 
 Route::get('/', 'VoteController@active');
 
+Route::post('/vote', 'VoteController@update');
+
+Route::get('/vote/{vote}', 'VoteController@show')->name('show');
+
 Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
