@@ -12,5 +12,28 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        DB::table('users')->insert([
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('password'),
+        ]);
+        DB::table('type_vote')->insert([
+            'name' => 'radio',
+        ]);
+        DB::table('type_vote')->insert([
+            'name' => 'checkbox',
+        ]);
+        DB::table('votes')->insert([
+            'question' => 'Какое время года вы любите больше?',
+            'answer_options' => '[
+                {"name": "Зима", "number_voters": 3}, 
+                {"name": "Весна", "number_voters": 1}, 
+                {"name": "Лето", "number_voters": 2}, 
+                {"name": "Осень", "number_voters": 0}
+            ]',
+            'all_voters' => 6,
+            'active' => 1,
+            'type_vote_id' => 1,
+        ]);
     }
 }
