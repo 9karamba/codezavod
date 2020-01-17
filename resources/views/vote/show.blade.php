@@ -5,6 +5,11 @@
         <div class="content card">
             <h1 class="text-muted card-header">Статистика</h1>
             <div class="card-body">
+                @if($message != '')
+                    <div class="alert alert-success">
+                        <strong>{{ $message }}</strong>
+                    </div>
+                @endif
                 <h4><strong>{{ $vote->question }}</strong></h4>
                 @foreach ($answer_options as $answer)
                     <span><strong>{{ $answer->name }}</strong></span>

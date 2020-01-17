@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App;
 use App\Vote;
 use App\Type_vote;
-use Illuminate\Support\Facades\Auth;
+use App\User_vote;
 
 class VoteController extends Controller
 {
@@ -48,9 +49,15 @@ class VoteController extends Controller
     *   Показывает статистику по голосованию
     */
     public function show(Vote $vote) {
-        $answer_options = json_decode($vote->answer_options);
-        $all_voters = (int)($vote->all_voters) ? $vote->all_voters : 1;
-        return view('vote.show', compact('vote', 'answer_options', 'all_voters'));
+        if(Auth::check()){
+            $message = App\User_vote::where('vote_id', $vote->id)->where('user_id', Auth::user()->id)->get()->count() ? 'Спасибо. Ваш голос важен для нас' : '';
+            $answer_options = json_decode($vote->answer_options);
+            $all_voters = (int)($vote->all_voters) ? $vote->all_voters : 1;
+            return view('vote.show', compact('vote', 'answer_options', 'all_voters', 'message'));
+        }
+        else{
+            return redirect()->route('welcome');
+        }
     }
 
     /*

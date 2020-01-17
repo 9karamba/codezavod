@@ -21,7 +21,7 @@ class Vote extends Model
     */
     public static function show_active() {
         $user = Auth::user();
-        $vote = static::where('active', 1) ?? static::where('active', 1)->with('type_vote')->get()[0];
+        $vote = static::where('active', 1) ? static::where('active', 1)->with('type_vote')->get()[0] : null;
 
         if(Auth::check() && $user->admin) :
             return 'Администраторы не голосуют :( Но вы можете посмотреть статистику в своем профиле.';
