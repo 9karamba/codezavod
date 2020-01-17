@@ -18,11 +18,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@gmail.com',
                 'password' => bcrypt('password'),
                 'admin' => true
-            ],
-            [
-                'name' => 'user',
-                'email' => 'user@gmail.com',
-                'password' => bcrypt('password')
             ]
         ]);
         DB::table('type_votes')->insert([
