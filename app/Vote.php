@@ -16,7 +16,11 @@ class Vote extends Model
             $join->on('votes.type_vote_id', '=', 'type_vote.id')
                  ->where('votes.active', '=', 1);
         })
-        ->get();;
+        ->get();
+    }
+
+    public static function show_all() {
+        return static::select('id', 'question', 'active')->get();
     }
 
     public function update_voters(array $data) {
@@ -51,5 +55,18 @@ class Vote extends Model
             ]);
 
         return $vote;
+    }
+
+    public function edit_active(string $id) {
+        if(!DB::table('votes')->where('active', 1)->get()->count()){
+            DB::table('votes')
+                ->where('id', $id)
+                ->update([
+                    'active' => 1
+                ]);
+        }
+        else{
+            return "Ошибка";
+        }
     }
 }
