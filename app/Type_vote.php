@@ -8,11 +8,12 @@ use DB;
 class Type_vote extends Model
 {
     public function vote() {
-        return $this->belongsTo(Vote::class);
+        return $this->hasOne(Vote::class)
+                    ->withDefault(['name' => 'radio']);
     }
 
     public function show() {
-        return DB::table('type_vote')
+        return DB::table('type_votes')
             ->select('id', 'name')
             ->get();
     }

@@ -9,7 +9,7 @@
                 @foreach ($answer_options as $answer)
                     <span><strong>{{ $answer->name }}</strong></span>
                     <div class="progress mb-4">
-                        <div class="progress-bar" role="progressbar" style="width: {{ ($answer->number_voters / $all_voters) * 100 }}%" aria-valuenow="{{ $answer->number_voters }}" aria-valuemin="0" aria-valuemax="{{ $all_voters }}"></div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ ($answer->number_voters / $all_voters) * 100 }}%" aria-valuenow="{{ $answer->number_voters }}" aria-valuemin="0" aria-valuemax="{{ $all_voters }}">{{ $answer->number_voters }}</div>
                     </div>
                 @endforeach
                 <a href="{{ url()->previous() }}" class="btn btn-success">Назад</a>

@@ -8,15 +8,11 @@ use DB;
 class Vote extends Model
 {
     public function type_vote() {
-        return $this->hasOne(Type_vote::class);
+        return $this->belongsTo(Type_vote::class);
     }
 
     public static function show_active() {
-        return static::join('type_vote', function ($join) {
-            $join->on('votes.type_vote_id', '=', 'type_vote.id')
-                 ->where('votes.active', '=', 1);
-        })
-        ->get();
+        return static::where('votes.active', '=', 1)->with('type_vote')->get();
     }
 
     public static function show_all() {
@@ -29,7 +25,7 @@ class Vote extends Model
         $vote = Vote::find($id);
         $answer = $data['answers'];
         $answer_options = json_decode($vote->answer_options);
-
+        
         if(!is_array($answer)) {
             foreach (json_decode($vote->answer_options) as $key => $value) :
                 if($value->name == $answer){
@@ -58,15 +54,15 @@ class Vote extends Model
     }
 
     public function edit_active(string $id) {
-        if(!DB::table('votes')->where('active', 1)->get()->count()){
-            DB::table('votes')
-                ->where('id', $id)
-                ->update([
-                    'active' => 1
-                ]);
-        }
-        else{
-            return "Ошибка";
-        }
+        DB::table('votes')
+            ->where('active', 1)
+            ->update([
+                'active' => 0,
+            ]);
+        DB::table('votes')
+            ->where('id', $id)
+            ->update([
+                'active' => 1
+            ]);
     }
 }

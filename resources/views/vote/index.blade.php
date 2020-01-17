@@ -23,11 +23,13 @@
                                 <td><a href="/vote/{{ $vote->id }}">{{ $vote->question }}</a></td>
                                 <td>{{ $vote->active ? 'Активно' : '-' }}</td>
                                 <td>
-                                    <form action="/vote/edit" method="post">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $vote->id }}">
-                                        <input class="btn btn-dark" type="submit" value="Активировать">
-                                    </form>
+                                    @if(!$vote->active)
+                                        <form action="/vote/edit" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $vote->id }}">
+                                            <input class="btn btn-dark" type="submit" value="Активировать">
+                                        </form>
+                                    @endif
                                 </td>
                                 <td>
                                     <form action="/vote/delete" method="post">

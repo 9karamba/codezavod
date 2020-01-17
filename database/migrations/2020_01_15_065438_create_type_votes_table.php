@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTypeVoteTable extends Migration
+class CreateTypeVotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTypeVoteTable extends Migration
      */
     public function up()
     {
-        Schema::create('type_vote', function (Blueprint $table) {
+        Schema::create('type_votes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->timestamps();
@@ -27,6 +27,6 @@ class CreateTypeVoteTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('type_vote');
+        Schema::dropIfExists('type_votes');
     }
 }

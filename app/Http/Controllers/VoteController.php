@@ -11,10 +11,15 @@ class VoteController extends Controller
 {
     public function active() {
         $votes = App\Vote::show_active();
-        foreach ($votes as $vote) :
-            $answers = json_decode($vote->answer_options);
-        endforeach;
-        return view('welcome', compact('votes', 'answers'));
+        if(isset($votes)) :
+            foreach ($votes as $vote) :
+                $answers = json_decode($vote->answer_options);
+            endforeach;
+            return view('welcome', compact('votes', 'answers'));
+        else :
+            $message = 'Активных голосований нет.';
+            return view('welcome', compact('message'));
+        endif;
     }
 
     public function update() {
@@ -30,7 +35,7 @@ class VoteController extends Controller
 
     public function show(Vote $vote) {
         $answer_options = json_decode($vote->answer_options);
-        $all_voters = $vote->all_voters ?? 1;
+        $all_voters = (int)($vote->all_voters) ? $vote->all_voters : 1;
         return view('vote.show', compact('vote', 'answer_options', 'all_voters'));
     }
 
