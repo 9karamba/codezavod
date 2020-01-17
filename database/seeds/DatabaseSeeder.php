@@ -13,21 +13,21 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         DB::table('users')->insert([
-            'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('password'),
-            'admin' => true,
-        ]);
-        DB::table('users')->insert([
-            'name' => 'user',
-            'email' => 'user@gmail.com',
-            'password' => bcrypt('password'),
+            [
+                'name' => 'admin',
+                'email' => 'admin@gmail.com',
+                'password' => bcrypt('password'),
+                'admin' => true
+            ],
+            [
+                'name' => 'user',
+                'email' => 'user@gmail.com',
+                'password' => bcrypt('password')
+            ]
         ]);
         DB::table('type_votes')->insert([
-            'name' => 'radio',
-        ]);
-        DB::table('type_votes')->insert([
-            'name' => 'checkbox',
+            [ 'name' => 'radio' ],
+            [ 'name' => 'checkbox' ]
         ]);
         DB::table('votes')->insert([
             'question' => 'Какое время года вы любите больше?',

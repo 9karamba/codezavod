@@ -16,6 +16,9 @@ class Vote extends Model
         return $this->hasOne(User_vote::class);
     }
 
+    /*
+    *   Выбирает активное голосование
+    */
     public static function show_active() {
         $user = Auth::user();
         $vote = static::where('active', 1)->with('type_vote')->get()[0];
@@ -29,6 +32,9 @@ class Vote extends Model
         endif;
     }
 
+    /*
+    *   Выбирает все голосования
+    */
     public static function show_all() {
         $user = Auth::user();
         $admin = $user->admin;
@@ -40,6 +46,9 @@ class Vote extends Model
         endif;
     }
 
+    /*
+    *   Добавляет голоса и отмечает, что пользователь проголосовал
+    */
     public static function update_voters(array $data) {
 
         $user = Auth::user();
@@ -80,19 +89,46 @@ class Vote extends Model
             $user_vote->save();
         endif;
 
-        return static::where('id', $vote->id)->get(); //where('id', $vote->id)->with('user_votes')->get()
+        return static::where('id', $vote->id)->get();
     }
 
+    /*
+    *   Делает голосование активным
+    */
     public function edit_active(string $id) {
-        DB::table('votes')
-            ->where('active', 1)
-            ->update([
-                'active' => 0,
-            ]);
-        DB::table('votes')
-            ->where('id', $id)
-            ->update([
-                'active' => 1
-            ]);
+        if(Auth::check() && Auth::user()->admin){
+            DB::table('votes')
+                ->where('active', 1)
+                ->update([
+                    'active' => 0,
+                ]);
+            DB::table('votes')
+                ->where('id', $id)
+                ->update([
+                    'active' => 1
+                ]);
+        }
+    }
+
+    public function create(array $data) {
+        if(Auth::check() && Auth::user()->admin){
+            $vote = new Vote();
+
+            $vote->question = $data['question'];
+            $vote->type_vote_id = $data['type'];
+            $answer_options = [];
+
+            foreach(request('answers') as $answer) {
+                if(trim($answer) != '') {
+                    $answer_options[] = (object)[
+                        'name' => $answer,
+                        'number_voters' => 0,
+                    ];
+                }
+            }
+
+            $vote->answer_options = json_encode($answer_options);
+            $vote->save();
+        }
     }
 }

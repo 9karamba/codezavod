@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="content card">
-            <h1 class="text-muted card-header">Спасибо! Ваш голос важен для нас.</h1>
+            <h1 class="text-muted card-header">Статистика</h1>
             <div class="card-body">
                 <h4><strong>{{ $vote->question }}</strong></h4>
                 @foreach ($answer_options as $answer)
