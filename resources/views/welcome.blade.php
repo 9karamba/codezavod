@@ -5,34 +5,36 @@
         <div class="content card">
             <h1 class="text-muted card-header">Активное голосование</h1>
             <div class="card-body">
-                @if(!isset($votes))
-                    <h4><strong>{{ $message }}</strong></h4>
+                @guest
+                    <h4><strong>Войдите, чтобы увидеть голосование</strong></h4>
                 @else
-                    @if($errors->count())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    @foreach ($votes as $vote)
+                    @if(!isset($votes))
+                        <h4><strong>{{ $message }}</strong></h4>
+                    @else
+                        @if($errors->count())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form action="/vote" method="post">
 
-                        @csrf
+                            @csrf
 
-                            <h4><strong>{{ $vote->question }}</strong></h4>
+                            <h4><strong>{{ $votes->question }}</strong></h4>
                             @foreach ($answers as $answer)
                                 <div class="form-group">
-                                    <input type="{{ $vote->type_vote->name }}" id="answer{{ $loop->index }}" name="{{ $vote->type_vote->name != 'checkbox' ? 'answers' : 'answers[]' }}" value="{{ $answer->name }}">
+                                    <input type="{{ $votes->type_vote->name }}" id="answer{{ $loop->index }}" name="{{ $votes->type_vote->name != 'checkbox' ? 'answers' : 'answers[]' }}" value="{{ $answer->name }}">
                                     <label class="form-check-label" for="answer{{ $loop->index }}">{{ $answer->name }}</label>
                                 </div>
                             @endforeach
-                            <input type="hidden" name="vote_id" value="{{ $vote->id }}">
+                            <input type="hidden" name="vote_id" value="{{ $votes->id }}">
                             <input type="submit" name="statistics" value="Сохранить" class="btn btn-primary">
                         </form>
-                    @endforeach
+                    @endif
                 @endif
             </div>
         </div>

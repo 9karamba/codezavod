@@ -11,13 +11,11 @@ class VoteController extends Controller
 {
     public function active() {
         $votes = App\Vote::show_active();
-        if(isset($votes)) :
-            foreach ($votes as $vote) :
-                $answers = json_decode($vote->answer_options);
-            endforeach;
+        if(isset($votes) && !is_string($votes)) :
+            $answers = json_decode($votes->answer_options);
             return view('welcome', compact('votes', 'answers'));
         else :
-            $message = 'Активных голосований нет.';
+            $message = is_string($votes) ? $votes : 'Активных голосований нет.';
             return view('welcome', compact('message'));
         endif;
     }
@@ -29,7 +27,7 @@ class VoteController extends Controller
             'answers' => 'required',
         ]);
 
-        $vote = (new Vote())->update_voters(request()->all());
+        $vote = (new Vote())->update_voters(request()->all())[0];
         return redirect()->route('show', [$vote->id]);
     }
 
@@ -41,7 +39,9 @@ class VoteController extends Controller
 
     public function index() {
         $votes = App\Vote::show_all();
-        return view('vote.index', compact('votes'));
+        $admin = is_string($votes) ? false : true;
+
+        return view('vote.index', compact('votes', 'admin'));
     }
 
     public function create() {
