@@ -23,7 +23,7 @@ Route::post('/vote/edit', 'VoteController@edit');
 
 Route::post('/vote/delete', 'VoteController@destroy');
 
-Auth::routes(['register' => false]);
+Auth::routes();
 
 Route::post('/home', 'VoteController@store');
 

@@ -10,6 +10,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public function user_votes() {
+        return $this->hasOne(User_vote::class);
+    }
     /**
      * The attributes that are mass assignable.
      *
