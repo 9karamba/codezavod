@@ -1,7 +1,7 @@
 # Прежде чем начать рекомендую сделать 2 вещи:
 
-*php artisan migrate
-*php artisan db:seed
+* php artisan migrate
+* php artisan db:seed
 
 
 # Спроектировать систему голосования
