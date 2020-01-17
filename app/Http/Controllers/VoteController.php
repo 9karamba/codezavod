@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App;
 use App\Vote;
 use App\Type_vote;
+use Illuminate\Support\Facades\Auth;
 
 class VoteController extends Controller
 {
@@ -33,9 +34,14 @@ class VoteController extends Controller
             'vote_id' => 'required',
             'answers' => 'required',
         ]);
-
-        $vote = (new Vote())->update_voters(request()->all())[0];
-        return redirect()->route('show', [$vote->id]);
+        
+        if(Auth::check()){
+            $vote = (new Vote())->update_voters(request()->all())[0];
+            return redirect()->route('show', [$vote->id]);
+        }
+        else{
+            return redirect()->route('welcome');
+        }
     }
 
     /*
@@ -51,18 +57,29 @@ class VoteController extends Controller
     *   Выводит все голосования
     */
     public function index() {
-        $votes = App\Vote::show_all();
-        $admin = is_string($votes) ? false : true;
 
-        return view('vote.index', compact('votes', 'admin'));
+        if(Auth::check()){
+            $votes = App\Vote::show_all();
+            $admin = is_string($votes) ? false : true;
+
+            return view('vote.index', compact('votes', 'admin'));
+        }
+        else{
+            return redirect()->route('welcome');
+        }
     }
 
     /*
     *   Выводит типы голосования и форму для создания голосования
     */
     public function create() {
-        $type_votes = (new Type_vote())->show();
-        return view('vote.create', compact('type_votes'));
+        if(Auth::check() && Auth::user()->admin){
+            $type_votes = (new Type_vote())->show();
+            return view('vote.create', compact('type_votes'));
+        }
+        else{
+            return redirect()->route('welcome');
+        }
     }
 
     /*
@@ -75,8 +92,13 @@ class VoteController extends Controller
             'answers' => 'required',
         ]);
 
-        (new Vote())->create(request()->all());
-        return redirect()->route('home');
+        if(Auth::check() && Auth::user()->admin){
+            (new Vote())->create(request()->all());
+            return redirect()->route('home');
+        }
+        else{
+            return redirect()->route('welcome');
+        }
     }
 
     /*
@@ -87,8 +109,13 @@ class VoteController extends Controller
             'id' => 'required',
         ]);
 
-        App\Vote::where('id', '=', request('id'))->delete();
-        return redirect()->route('home');
+        if(Auth::check() && Auth::user()->admin){
+            App\Vote::where('id', '=', request('id'))->delete();
+            return redirect()->route('home');
+        }
+        else{
+            return redirect()->route('welcome');
+        }
     }
 
     /*
@@ -99,7 +126,12 @@ class VoteController extends Controller
             'id' => 'required',
         ]);
 
-        $success = (new Vote())->edit_active(request('id'));
-        return redirect()->route('home');
+        if(Auth::check() && Auth::user()->admin){
+            $success = (new Vote())->edit_active(request('id'));
+            return redirect()->route('home');
+        }
+        else{
+            return redirect()->route('welcome');
+        }
     }
 }
